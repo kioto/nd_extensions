@@ -1,0 +1,49 @@
+{
+	"$schema": "manifest.schema.json",
+
+	"name": "LoadUCScenario", // TODO ここはすべてのエクステンションでユニークになるようにして下さい。
+	"main": "LoadUCScenario.dll", // TODO ここはプロジェクトのアセンブリファイル名と同じにしてください。
+	
+	"lifecycle": "application",
+
+	"extensionPoints": {
+
+		"commands": [
+			{
+				"id": "LoadUCScenario.HelloCommand",
+				"execFunc": "SayHello"
+			}
+		],
+
+		"events": {
+		},
+
+		"ribbon": {
+			"tabs": [
+				{
+					"id": "LoadUCScenario.HelloTab",
+					"label": "Hello",
+
+					"groups": [
+						{
+							"id": "LoadUCScenario.Group1",
+							"label": "Group1",
+
+							"controls": [
+								{
+									"id": "LoadUCScenario.HelloButton",
+									"type": "Button",
+									"label": "Hello",
+									"command": "LoadUCScenario.HelloCommand"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+
+
+	}
+
+}

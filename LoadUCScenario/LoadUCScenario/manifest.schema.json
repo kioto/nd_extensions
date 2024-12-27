@@ -1,0 +1,648 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "displayName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "publisher": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "homepage": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "env": {
+      "type": "object",
+      "properties": {
+        "nextdesign": {
+          "type": "string"
+        }
+      }
+    },
+    "main": {
+      "type": "string"
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": [ "application", "project" ]
+    },
+    "baseprofile": {
+      "type": "string"
+    },
+
+    "extensionPoints": {
+      "type": "object",
+      "properties": {
+        "ribbon": {
+          "$ref": "#/definitions/ui/ribbon"
+        },
+        "events": {
+          "type": "object",
+          "properties": {
+            "application": {
+              "$ref": "#/definitions/event/application"
+            },
+            "project": {
+              "$ref": "#/definitions/event/project"
+            },
+            "commands": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/event/command"
+              }
+            },
+            "models": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/event/model"
+              }
+            },
+            "navigators": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/event/navigator"
+              }
+            },
+            "pages": {
+              "$ref": "#/definitions/event/page"
+            },
+            "editors": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/event/editor"
+              }
+            }
+          }
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/command"
+          }
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "sharedAssemblies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [ "name", "main", "lifecycle" ],
+
+  "definitions": {
+    "ui": {
+      "ribbon": {
+        "$id": "#ribbon",
+        "type": "object",
+        "properties": {
+          "tabs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ui/tab"
+            }
+          }
+        }
+      },
+      "tab": {
+        "$id": "#tab",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "orderBefore": {
+            "type": "string"
+          },
+          "orderAfter": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "string",
+            "enum": [ "true", "false" ]
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ui/group"
+            }
+          }
+        },
+        "required": [ "id", "label" ]
+      },
+      "group": {
+        "$id": "#group",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "orderBefore": {
+            "type": "string"
+          },
+          "orderAfter": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "string",
+            "enum": [ "true", "false" ]
+          },
+          "controls": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                { "$ref": "#/definitions/ui/button" },
+                { "$ref": "#/definitions/ui/checkbox" },
+                { "$ref": "#/definitions/ui/separator" },
+                { "$ref": "#/definitions/ui/buttongroup" },
+                { "$ref": "#/definitions/ui/stackpanel" },
+                { "$ref": "#/definitions/ui/menu" },
+                { "$ref": "#/definitions/ui/splitbutton" }
+              ]
+            }
+          }
+        },
+        "required": [ "id", "label" ]
+      },
+      "control": {
+        "$id": "#control",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "orderBefore": {
+            "type": "string"
+          },
+          "orderAfter": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "string",
+            "enum": [ "true", "false" ]
+          },
+          "isEnabled": {
+            "type": "string"
+          }
+        },
+        "required": [ "type", "id" ]
+      },
+      "button": {
+        "$id": "#button",
+        "allOf": [
+          { "$ref": "#/definitions/ui/control" },
+          {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [ "Button" ]
+              },
+              "isEnabled": {
+                "type": "string"
+              },
+              "isChecked": {
+                "type": "string"
+              },
+              "imageSmall": {
+                "type": "string"
+              },
+              "imageLarge": {
+                "type": "string"
+              },
+              "command": {
+                "type": "string"
+              }
+            },
+            "required": [ "type", "id", "label", "command" ]
+          }
+        ]
+      },
+      "checkbox": {
+        "$id": "#checkbox",
+        "allOf": [
+          { "$ref": "#/definitions/ui/control" },
+          {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [ "CheckBox" ]
+              },
+              "isChecked": {
+                "type": "string"
+              }
+            },
+            "required": [ "type", "id", "label", "isChecked" ]
+          }
+        ]
+      },
+      "separator": {
+        "$id": "#separator",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [ "Separator" ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "orderBefore": {
+            "type": "string"
+          },
+          "orderAfter": {
+            "type": "string"
+          }
+        },
+        "required": [ "type", "id" ]
+      },
+      "buttongroup": {
+        "$id": "#buttongroup",
+        "allOf": [
+          { "$ref": "#/definitions/ui/control" },
+          {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [ "ButtonGroup" ]
+              },
+              "controls": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    { "$ref": "#/definitions/ui/button" },
+                    {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [ "Button", "Separator" ]
+                            }
+                          }
+                        },
+                        { "$ref": "#/definitions/ui/separator" }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [ "type", "id", "controls" ]
+          }
+        ]
+      },
+      "stackpanel": {
+        "$id": "#stackpanel",
+        "allOf": [
+          { "$ref": "#/definitions/ui/control" },
+          {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [ "StackPanel" ]
+              },
+              "controls": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    { "$ref": "#/definitions/ui/button" },
+                    { "$ref": "#/definitions/ui/checkbox" },
+                    { "$ref": "#/definitions/ui/menu" }
+                  ]
+                },
+                "maxItems": 3
+              }
+            },
+            "required": [ "type", "id", "controls" ]
+          }
+        ]
+      },
+      "menu": {
+        "$id": "#menu",
+        "allOf": [
+          { "$ref": "#/definitions/ui/control" },
+          {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [ "Menu" ]
+              },
+              "imageLarge": {
+                "type": "string"
+              },
+              "controls": {
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    { "$ref": "#/definitions/ui/button" },
+                    {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [ "Button", "Separator" ]
+                            }
+                          }
+                        },
+                        { "$ref": "#/definitions/ui/separator" }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [ "type", "id", "controls" ]
+          }
+        ]
+      },
+      "splitbutton": {
+        "$id": "#splitbutton",
+        "allOf": [
+          { "$ref": "#/definitions/ui/control" },
+          {
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [ "SplitButton" ]
+              },
+              "isEnabled": {
+                "type": "string"
+              },
+              "isChecked": {
+                "type": "string"
+              },
+              "imageLarge": {
+                "type": "string"
+              },
+              "command": {
+                "type": "string"
+              },
+              "controls": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ui/menu"
+                }
+              }
+            },
+            "required": [ "type", "id", "command", "controls" ]
+          }
+        ]
+      }
+    },
+    "event": {
+      "application": {
+        "type": "object",
+        "properties": {
+          "onAfterStart": {
+            "type": "string"
+          },
+          "onBeforeQuit": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "project": {
+        "type": "object",
+        "properties": {
+          "onAfterNew": {
+            "type": "string"
+          },
+          "onBeforeOpen": {
+            "type": "string"
+          },
+          "onAfterOpen": {
+            "type": "string"
+          },
+          "onBeforeSave": {
+            "type": "string"
+          },
+          "onAfterSave": {
+            "type": "string"
+          },
+          "onBeforeClose": {
+            "type": "string"
+          },
+          "onAfterClose": {
+            "type": "string"
+          },
+          "onBeforeReload": {
+            "type": "string"
+          },
+          "onAfterReload": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "command": {
+        "type": "object",
+        "properties": {
+          "commandId": {
+            "type": "string"
+          },
+          "onBeforeExecute": {
+            "type": "string"
+          },
+          "onAfterExecute": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "model": {
+        "type": "object",
+        "properties": {
+          "class": {
+            "type": "string"
+          },
+          "onBeforeNew": {
+            "type": "string"
+          },
+          "onAfterNew": {
+            "type": "string"
+          },
+          "onFieldChanged": {
+            "type": "string"
+          },
+          "onBeforeDelete": {
+            "type": "string"
+          },
+          "onBeforeChangeOwner": {
+            "type": "string"
+          },
+          "onAfterChangeOwner": {
+            "type": "string"
+          },
+          "onBeforeChangeOrder": {
+            "type": "string"
+          },
+          "onAfterChangeOrder": {
+            "type": "string"
+          },
+          "onBeforeNewRelation": {
+            "type": "string"
+          },
+          "onAfterNewRelation": {
+            "type": "string"
+          },
+          "onValidate": {
+            "type": "string"
+          },
+          "onError": {
+            "type": "string"
+          },
+          "onSelectionChanged": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "navigator": {
+        "type": "object",
+        "properties": {
+          "navigator": {
+            "type": "string",
+            "enum": [ "modelNavigator", "profileNavigator" ]
+          },
+          "onShow": {
+            "type": "string"
+          },
+          "onHide": {
+            "type": "string"
+          },
+          "onSelectionChanged": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "page": {
+        "type": "object",
+        "properties": {
+          "onBeforeChange": {
+            "type": "string"
+          },
+          "onAfterChange": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "editor": {
+        "type": "object",
+        "properties": {
+          "viewDefinition": {
+            "type": "string"
+          },
+          "onShow": {
+            "type": "string"
+          },
+          "onHide": {
+            "type": "string"
+          },
+          "onSelectionChanged": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "command": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        },
+        "execFunc": {
+          "type": "string"
+        },
+        "canExecFunc": {
+          "type": "string"
+        },
+        "canExecWhen": {
+          "type": "object",
+          "properties": {
+            "uiState": {
+              "type": "string",
+              "enum": [ "Always", "ProjectOpened", "ModelSelected", "ModelSelectedInEditor" ]
+            },
+            "profiles": {
+              "type": "string"
+            },
+            "metamodels": {
+              "type": "string"
+            },
+            "viewDefinitions": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "required": [ "id", "execFunc" ]
+    }
+  }
+}
