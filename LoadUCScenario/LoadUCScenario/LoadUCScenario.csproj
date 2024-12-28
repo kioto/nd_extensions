@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="NextDesign.Desktop" Version="*" />
+    <PackageReference Include="NPOI" Version="2.7.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update="manifest.json">
