@@ -12,7 +12,13 @@ namespace LoadUCScenario
         private void AddFlow(IModel usecase, UCScenarioFlow ucsFlow)
         {
             var flow = usecase.AddNewModel("Scenarios", "フロー");
-            flow.SetField("Name", ucsFlow.FlowType);
+            if (ucsFlow.FlowType == "基本フロー")
+            {
+                flow.SetField("Name", ucsFlow.FlowType);
+            } else
+            {
+                flow.SetField("Name", ucsFlow.Description);
+            }
             flow.SetField("Description", ucsFlow.Description);
             flow.SetField("ID", ucsFlow.FlowId);
         }

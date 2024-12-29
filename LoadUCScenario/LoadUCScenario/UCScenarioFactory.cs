@@ -127,14 +127,11 @@ namespace LoadUCScenario
             public FlowRow(IRow row)
             {
                 var flowType = row.GetCell(0).ToString();
-                if (flowType != "課題、TBD事項")
-                {
-                    FlowType = flowType;
-                    FlowId = row.GetCell(2).ToString();
-                    Scenario = row.GetCell(3).ToString();
-                    Branches = row.GetCell(4).ToString().Split('\n');
-                    Note = row.GetCell(5).ToString();
-                }
+                FlowType = flowType;
+                FlowId = row.GetCell(2).ToString();
+                Scenario = row.GetCell(3).ToString();
+                Branches = row.GetCell(4).ToString().Split('\n');
+                Note = row.GetCell(5).ToString();
             }
 
             public bool isMainFlow()
@@ -152,12 +149,12 @@ namespace LoadUCScenario
             }
             public bool isOtherFlowType()
             {
-                return !isMainFlow() && !isAlternativeFlows() && isExceptionFlows() && FlowType != "";
+                return FlowType.Length > 0 && !isMainFlow() && !isAlternativeFlows() && !isExceptionFlows();
             }
 
             public bool isFlowTitle()
             {
-                return !FlowType.Contains("-");
+                return FlowId.Length > 0 && !FlowId.Contains("-");
             }
         }
 
@@ -190,13 +187,16 @@ namespace LoadUCScenario
                 var row = sheet.GetRow(rowIndex);
                 if (row == null) break;
 
+                bool isFlowTitle = false;
                 var flowRow = new FlowRow(row);
                 // 基本/代替/例外フローのステート切り替え
                 if (flowRow.isMainFlow())
                 {
                     flowType = FlowTypeEnum.MainFlow;
+                    isFlowTitle = true;  // 基本フローだけ無条件に先頭
                     flow = new UCScenarioFlow("基本フロー", "MF", "基本フロー");
                     scenario.MainFlow = flow;
+                    continue;
                 }
                 else if (flowRow.isAlternativeFlows())
                 {
@@ -205,46 +205,33 @@ namespace LoadUCScenario
                 else if (flowRow.isExceptionFlows())
                 {
                     flowType = FlowTypeEnum.ExceptionFlow;
-                }
-                else if (flowRow.isOtherFlowType())
+                } else if (flowRow.isOtherFlowType())
                 {
                     flowType = FlowTypeEnum.None;
+                    continue;
                 }
 
-                if (flowType == FlowTypeEnum.MainFlow)
+                // フローの先頭判定
+                if (isFlowTitle == false)
                 {
-                    // 基本フローのフロー行の登録
-                    EntryFlowElement(flow, flowRow);
-                }
-                else if (flowType == FlowTypeEnum.AlternativeFlow)
-                {
-                    // 代替フローのフロー行の登録
-                    if (flowRow.isFlowTitle())
+                    if (flowType == FlowTypeEnum.AlternativeFlow && flowRow.isFlowTitle())
                     {
-                        // タイトル行
-                        flow = new UCScenarioFlow("代替フロー",
-                                                 flowRow.FlowId, flowRow.Scenario);
+                        flow = new UCScenarioFlow("代替フロー", flowRow.FlowId, flowRow.Scenario);
                         scenario.AlternativeFlows.Add(flow);
+                        continue;
                     }
-                    else
+                    else if (flowType == FlowTypeEnum.ExceptionFlow && flowRow.isFlowTitle())
                     {
-                        EntryFlowElement(flow, flowRow);
+                        flow = new UCScenarioFlow("例外フロー", flowRow.FlowId, flowRow.Scenario);
+                        scenario.ExceptionFlows.Add(flow);
+                        continue;
                     }
                 }
-                else if (flowType == FlowTypeEnum.ExceptionFlow)
+
+                if (flowType != FlowTypeEnum.None)
                 {
-                    // 例外フローのフロー行の登録
-                    if (flowRow.isFlowTitle())
-                    {
-                        // タイトル行
-                        flow = new UCScenarioFlow("例外フロー",
-                                                 flowRow.FlowId, flowRow.Scenario);
-                        scenario.ExceptionFlows.Add(flow);
-                    }
-                    else
-                    {
-                        EntryFlowElement(flow, flowRow);
-                    }
+                    // フローを登録
+                    EntryFlowElement(flow, flowRow);
                 }
             }
         }
