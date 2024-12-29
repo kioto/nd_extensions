@@ -21,6 +21,16 @@ namespace LoadUCScenario
             }
             flow.SetField("Description", ucsFlow.Description);
             flow.SetField("ID", ucsFlow.FlowId);
+
+            foreach(var elem in ucsFlow.Sequence)
+            {
+                var step = flow.AddNewModel("Steps", "Step");
+                step.SetField("フローID", elem.FlowId);
+                step.SetField("シナリオ", elem.Scenario);
+                step.SetField("Name", elem.Scenario);
+                step.SetField("分岐", String.Join("\n", elem.Branches));
+                step.SetField("備考", elem.Note);
+            }
         }
 
         public void AddScenario(IModel model, UCScenario ucs)

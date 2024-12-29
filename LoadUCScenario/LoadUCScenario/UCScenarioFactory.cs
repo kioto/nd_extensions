@@ -196,7 +196,6 @@ namespace LoadUCScenario
                     isFlowTitle = true;  // 基本フローだけ無条件に先頭
                     flow = new UCScenarioFlow("基本フロー", "MF", "基本フロー");
                     scenario.MainFlow = flow;
-                    continue;
                 }
                 else if (flowRow.isAlternativeFlows())
                 {
