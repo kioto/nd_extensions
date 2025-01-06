@@ -18,6 +18,7 @@ namespace LoadUCScenario
             } else
             {
                 flow.SetField("Name", ucsFlow.Description);
+                flow.SetField("フロー区分", ucsFlow.FlowType);
             }
             flow.SetField("Description", ucsFlow.Description);
             flow.SetField("ID", ucsFlow.FlowId);
