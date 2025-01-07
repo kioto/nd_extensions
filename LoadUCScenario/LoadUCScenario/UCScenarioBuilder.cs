@@ -9,6 +9,18 @@ namespace LoadUCScenario
 {
     internal class UCScenarioBuilder
     {
+        private void AddActor(IModel actor_package, IModel usecase, String actorName, int index)
+        {
+
+            IModel actor = NDTools.findActor(actor_package, actorName);
+            if (actor == null)
+            {
+                actor = actor_package.AddNewModel("OwnedElements", "Actor");
+                actor.SetField("Name", actorName);
+            }
+            //usecase.SetFieldAt("Actors", actor,index);
+        }
+
         private void AddFlow(IModel usecase, UCScenarioFlow ucsFlow)
         {
             var flow = usecase.AddNewModel("Scenarios", "フロー");
@@ -34,26 +46,40 @@ namespace LoadUCScenario
             }
         }
 
-        public void AddScenario(IModel model, UCScenario ucs)
+        public void AddScenario(IProject project, UCScenario ucs)
         {
+            // ユースケースパッケージの取得
+            var uc_package = NDTools.findPackage(project, "システム開発/システム要件開発/ユースケース");
+
             // ユースケースのモデルを作成
-            var uc = model.AddNewModel("OwnedElements", "Usecase");
-            uc.SetField("Name", ucs.ScenarioId);
-            uc.SetField("Description", ucs.ScenarioId);
+            var uc_model = uc_package.AddNewModel("OwnedElements", "Usecase");
+            uc_model.SetField("Name", ucs.ScenarioId);
+            uc_model.SetField("Description", ucs.ScenarioId);
+
+            // アクターパッケージの取得
+            var actor_package = NDTools.findPackage(project, "システム開発/システム要件開発/アクター");
+
+            // アクターの登録
+            var index = 0;
+            foreach (var actorName in ucs.Actors)
+            {
+                AddActor(actor_package, uc_model, actorName, index);
+                index += 1;
+            }
 
             // 基本フローの登録
-            AddFlow(uc, ucs.MainFlow);
+            AddFlow(uc_model, ucs.MainFlow);
 
             // 代替フローの登録
             foreach (var flow in ucs.AlternativeFlows)
             {
-                AddFlow(uc, flow);
+                AddFlow(uc_model, flow);
             }
 
             // 例外フローの登録
             foreach (var flow in ucs.ExceptionFlows)
             {
-                AddFlow(uc, flow);
+                AddFlow(uc_model, flow);
             }
         }
     }

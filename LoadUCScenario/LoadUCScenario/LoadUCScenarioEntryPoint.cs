@@ -40,21 +40,6 @@ namespace LoadUCScenario
 
         #endregion
 
-        private IModel findPackage(IModel parent, string pathName)
-        {
-            IModel model = null;
-            foreach (var package in parent.FindChildrenByClassDisplayName("パッケージ", recursive: true))
-            {
-                if (package.ModelPath == pathName)
-                {
-                    model = package;
-                    break;
-                }
-            }
-
-            return model;
-        }
-
         #region Commands
         /// <summary>
         /// ユースケースシナリオ読み込みのコマンド実行です
@@ -75,9 +60,8 @@ namespace LoadUCScenario
 
             // モデルに書き込み
             var project = App.Workspace.CurrentProject;
-            var pkg = findPackage(project, "システム開発/システム要件開発/ユースケース");
             var builder = new UCScenarioBuilder();
-            builder.AddScenario(pkg, scenario);
+            builder.AddScenario(project, scenario);
 
             App.Window.UI.ShowMessageBox(scenario.ScenarioId, "LoadUCScenario");
         }
