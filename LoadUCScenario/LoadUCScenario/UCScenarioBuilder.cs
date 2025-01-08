@@ -9,7 +9,7 @@ namespace LoadUCScenario
 {
     internal class UCScenarioBuilder
     {
-        private void AddActor(IModel actor_package, IModel usecase, String actorName, int index)
+        private void AddActor(IModel actor_package, IModel usecase, String actorName)
         {
 
             IModel actor = NDTools.findActor(actor_package, actorName);
@@ -18,7 +18,7 @@ namespace LoadUCScenario
                 actor = actor_package.AddNewModel("OwnedElements", "Actor");
                 actor.SetField("Name", actorName);
             }
-            //usecase.SetFieldAt("Actors", actor,index);
+            usecase.Relate("Actors", actor);
         }
 
         private void AddFlow(IModel usecase, UCScenarioFlow ucsFlow)
@@ -60,11 +60,9 @@ namespace LoadUCScenario
             var actor_package = NDTools.findPackage(project, "システム開発/システム要件開発/アクター");
 
             // アクターの登録
-            var index = 0;
             foreach (var actorName in ucs.Actors)
             {
-                AddActor(actor_package, uc_model, actorName, index);
-                index += 1;
+                AddActor(actor_package, uc_model, actorName);
             }
 
             // 基本フローの登録
