@@ -48,6 +48,14 @@ namespace LoadUCScenario
         /// <param name="p"></param>
         public void Load(ICommandContext context, ICommandParams p)
         {
+            // プロジェクトのチェック
+            var project = App.Workspace.CurrentProject;
+            if (project == null)
+            {
+                App.Window.UI.ShowInformationDialog("登録先のモデルファイルを読み込んでください", "LoadUCScenario");
+                return;
+            }
+
             // Excelファイルのユースケースシナリオを読み込み
             var filter = "Excel Files (*.xls, *.xlsx)|*.xls;*.xlsx";
             var filePath = m_Context.App.Window.UI.ShowOpenFileDialog(filter: filter);
@@ -55,11 +63,11 @@ namespace LoadUCScenario
             {
                 return;
             }
+
             var scFactory = new UCScenarioFactory();
             var scenario = scFactory.create(filePath);
 
             // モデルに書き込み
-            var project = App.Workspace.CurrentProject;
             var builder = new UCScenarioBuilder();
             builder.AddScenario(project, scenario);
 
