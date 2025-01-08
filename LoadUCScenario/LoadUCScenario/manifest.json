@@ -21,19 +21,20 @@
 		"ribbon": {
 			"tabs": [
 				{
-					"id": "LoadUCScenario.HelloTab",
+					"id": "LoadUCScenario.LoadTab",
 					"label": "UCS Load",
 
 					"groups": [
 						{
 							"id": "LoadUCScenario.Group1",
-							"label": "Group1",
+							"label": "読み込み",
 
 							"controls": [
 								{
-									"id": "LoadUCScenario.HelloButton",
+									"id": "LoadUCScenario.LoadButton",
 									"type": "Button",
 									"label": "Load",
+									"imageLarge": "resources/images/excel-icon.png",
 									"command": "LoadUCScenario.LoadCommand"
 								}
 							]
