@@ -34,14 +34,14 @@ namespace LoadUCScenario
         private void SetHeader(UCScenario scenario, ISheet sheet)
         {
             var rowIndex = 0;
+            bool preCond = false;
+            bool postCond = false;
             while (true)
             {
                 var row = sheet.GetRow(rowIndex);
                 var title = row.GetCell(0).ToString();
                 var opt = row.GetCell(1).ToString();
                 var val = row.GetCell(2).ToString();
-                bool preCond = false;
-                bool postCond = false;
                 if (title == "" && opt == "")
                 {
                     break;

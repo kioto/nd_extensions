@@ -9,12 +9,12 @@ namespace LoadUCScenario
 {
     public struct UCScenarioCondition
     {
-        public string Actor;      // アクター
+        public string Title;      // タイトル
         public string Condition;  // 条件
 
-        public UCScenarioCondition(string actor, string condition)
+        public UCScenarioCondition(string title, string condition)
         {
-            Actor = actor;
+            Title = title;
             Condition = condition;
         }
     }

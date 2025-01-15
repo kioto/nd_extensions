@@ -36,6 +36,13 @@
 									"label": "Load",
 									"imageLarge": "resources/images/excel-icon.png",
 									"command": "LoadUCScenario.LoadCommand"
+								},
+								{
+									"id": "LoadUCScenario.LoadFolderButton",
+									"type": "Button",
+									"label": "Load Folder",
+									"imageLarge": "resources/images/folder-icon.png",
+									"command": "LoadUCScenario.LoadFolder"
 								}
 							]
 						}

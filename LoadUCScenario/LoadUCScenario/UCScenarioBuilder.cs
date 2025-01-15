@@ -21,6 +21,20 @@ namespace LoadUCScenario
             usecase.Relate("Actors", actor);
         }
 
+        private void AddPreCondition(IModel usecase, UCScenarioCondition ucsCond)
+        {
+            var cond = usecase.AddNewModel("PreCondition", "Condition");
+            cond.SetField("Name", ucsCond.Title);
+            cond.SetField("Description", ucsCond.Condition);
+        }
+
+        private void AddPostCondition(IModel usecase, UCScenarioCondition ucsCond)
+        {
+            var cond = usecase.AddNewModel("PostCondition", "Condition");
+            cond.SetField("Name", ucsCond.Title);
+            cond.SetField("Description", ucsCond.Condition);
+        }
+
         private void AddFlow(IModel usecase, UCScenarioFlow ucsFlow)
         {
             var flow = usecase.AddNewModel("Scenarios", "フロー");
@@ -63,6 +77,18 @@ namespace LoadUCScenario
             foreach (var actorName in ucs.Actors)
             {
                 AddActor(actor_package, uc_model, actorName);
+            }
+
+            // 事前条件の登録
+            foreach(var cond in ucs.PreConditions)
+            {
+                AddPreCondition(uc_model, cond);
+            }
+
+            // 事後条件の登録
+            foreach (var cond in ucs.PreConditions)
+            {
+                AddPostCondition(uc_model, cond);
             }
 
             // 基本フローの登録
