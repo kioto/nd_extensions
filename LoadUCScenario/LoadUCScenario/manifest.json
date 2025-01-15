@@ -12,6 +12,10 @@
 			{
 				"id": "LoadUCScenario.LoadCommand",
 				"execFunc": "Load"
+			},
+			{
+				"id": "LoadUCScenario.LoadFolderCommand",
+				"execFunc": "LoadFolder"
 			}
 		],
 
@@ -42,7 +46,7 @@
 									"type": "Button",
 									"label": "Load Folder",
 									"imageLarge": "resources/images/folder-icon.png",
-									"command": "LoadUCScenario.LoadFolder"
+									"command": "LoadUCScenario.LoadFolderCommand"
 								}
 							]
 						}

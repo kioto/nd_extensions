@@ -30,7 +30,7 @@ namespace LoadUCScenario
 
         private void AddPostCondition(IModel usecase, UCScenarioCondition ucsCond)
         {
-            var cond = usecase.AddNewModel("PostCondition", "Condition");
+            var cond = usecase.AddNewModel("PreCondition", "Condition");
             cond.SetField("Name", ucsCond.Title);
             cond.SetField("Description", ucsCond.Condition);
         }

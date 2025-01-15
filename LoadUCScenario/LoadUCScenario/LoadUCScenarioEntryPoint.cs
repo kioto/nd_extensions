@@ -3,6 +3,7 @@ using System.Windows;
 using NextDesign.Desktop;
 using NextDesign.Extension;
 using NextDesign.Core;
+using System.IO;
 
 namespace LoadUCScenario
 {
@@ -90,21 +91,30 @@ namespace LoadUCScenario
             }
 
             // Excelファイルのユースケースシナリオを読み込み
-            var filter = "Excel Files (*.xls, *.xlsx)|*.xls;*.xlsx";
-            var filePath = m_Context.App.Window.UI.ShowOpenFileDialog(filter: filter);
+            var filePath = m_Context.App.Window.UI.ShowSelectFolderDialog();
             if (string.IsNullOrEmpty(filePath))
             {
                 return;
             }
 
             var scFactory = new UCScenarioFactory();
-            var scenario = scFactory.create(filePath);
 
             // モデルに書き込み
             var builder = new UCScenarioBuilder();
-            builder.AddScenario(project, scenario);
-
-            App.Window.UI.ShowMessageBox(scenario.ScenarioId, "LoadUCScenario");
+            String message = "";
+            foreach (string excel_file in Directory.GetFiles(filePath, "*.xlsx"))
+            {
+                try
+                {
+                    var scenario = scFactory.create(excel_file);
+                    builder.AddScenario(project, scenario);
+                    message += " - " + scenario.ScenarioId + "\n";
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+            App.Window.UI.ShowMessageBox("以下のユースケースを読み込みました。\n\n"+message, "LoadUCScenario");
         }
 
         #endregion
