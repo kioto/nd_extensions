@@ -19,19 +19,47 @@ namespace LoadUCScenario
         {
         }
 
-        public UCScenario create(string filePath)
+        public (UCScenario, string) create(string filePath)
         {
             var workbook = WorkbookFactory.Create(filePath);
             var worksheet = workbook.GetSheetAt(0);
             var scenario = new UCScenario();
+            bool res = true;
+            string errMsg = "";
 
-            SetHeader(scenario, worksheet);
-            SetFlows(scenario, worksheet);
+            if (isScenarioSheet(worksheet) == false)
+            {
+                return (null, errMsg);
+            }
 
-            return scenario;
+            (res, errMsg) = SetHeader(scenario, worksheet);
+            if (res == false)
+            {
+                return (null, errMsg);
+            }
+
+            (res, errMsg) = SetFlows(scenario, worksheet);
+            if (res == false)
+            {
+                return (null, errMsg);
+            }
+
+            return (scenario, errMsg);
         }
 
-        private void SetHeader(UCScenario scenario, ISheet sheet)
+        private bool isScenarioSheet(ISheet sheet)
+        {
+            var row = sheet.GetRow(0);
+            if(row.GetCell(0) == null || row.GetCell(0).ToString() != "シナリオID")
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
+
+        private (bool, string) SetHeader(UCScenario scenario, ISheet sheet)
         {
             var rowIndex = 0;
             bool preCond = false;
@@ -39,6 +67,10 @@ namespace LoadUCScenario
             while (true)
             {
                 var row = sheet.GetRow(rowIndex);
+                if(row.GetCell(0) == null || row.GetCell(1) == null || row.GetCell(2) == null)
+                {
+                    return (false, "ヘッダ情報がありません。");
+                }
                 var title = row.GetCell(0).ToString();
                 var opt = row.GetCell(1).ToString();
                 var val = row.GetCell(2).ToString();
@@ -99,7 +131,7 @@ namespace LoadUCScenario
 
                 rowIndex++;
             }
-            return;
+            return (true, "");
         }
 
         private int GetFlowHeaderIndex(ISheet sheet)
@@ -172,11 +204,11 @@ namespace LoadUCScenario
             flow.Sequence.Add(elem);
         }
 
-        private void SetFlows(UCScenario scenario, ISheet sheet)
+        private (bool, string) SetFlows(UCScenario scenario, ISheet sheet)
         {
             // 「フロー」のヘッダまでスキップ
             var rowIndex = GetFlowHeaderIndex(sheet);
-            if (rowIndex < 0) return;  // フローヘッダが見つからない
+            if (rowIndex < 0) return (false, "フローが見つかりません");  // フローヘッダが見つからない
 
             // フロー行の解析
             FlowTypeEnum flowType = FlowTypeEnum.None;
@@ -233,6 +265,12 @@ namespace LoadUCScenario
                     EntryFlowElement(flow, flowRow);
                 }
             }
+
+            if (scenario.MainFlow.Description == null)
+            {
+                return (false, "メインフローが見つかりません");
+            }
+            return (true, "");
         }
     }
 }

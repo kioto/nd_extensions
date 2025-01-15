@@ -66,13 +66,19 @@ namespace LoadUCScenario
             }
 
             var scFactory = new UCScenarioFactory();
-            var scenario = scFactory.create(filePath);
+            var (scenario, errMsg) = scFactory.create(filePath);
 
-            // モデルに書き込み
-            var builder = new UCScenarioBuilder();
-            builder.AddScenario(project, scenario);
-
-            App.Window.UI.ShowMessageBox(scenario.ScenarioId, "LoadUCScenario");
+            if (scenario == null)
+            {
+                App.Window.UI.ShowMessageBox("ERROR: "+errMsg+"\n\n"+filePath,"エラー");
+            }
+            else
+            {
+                // モデルに書き込み
+                var builder = new UCScenarioBuilder();
+                builder.AddScenario(project, scenario);
+                App.Window.UI.ShowMessageBox(scenario.ScenarioId, "LoadUCScenario");
+            }
         }
 
         /// <summary>
@@ -102,16 +108,18 @@ namespace LoadUCScenario
             // モデルに書き込み
             var builder = new UCScenarioBuilder();
             String message = "";
-            foreach (string excel_file in Directory.GetFiles(filePath, "*.xlsx"))
+            UCScenario scenario = null;
+            String errMsg = ""
+;            foreach (string excel_file in Directory.GetFiles(filePath, "*.xlsx"))
             {
-                try
-                {
-                    var scenario = scFactory.create(excel_file);
+                (scenario, errMsg) = scFactory.create(excel_file);
+                if (scenario != null) {
                     builder.AddScenario(project, scenario);
                     message += " - " + scenario.ScenarioId + "\n";
-                }
-                catch (Exception ex)
+                } else if(errMsg != "")
                 {
+                    App.Window.UI.ShowMessageBox("ERROR: " + errMsg + "\n\n" + System.IO.Path.GetFileName(excel_file), "エラー");
+                    return;
                 }
             }
             App.Window.UI.ShowMessageBox("以下のユースケースを読み込みました。\n\n"+message, "LoadUCScenario");
