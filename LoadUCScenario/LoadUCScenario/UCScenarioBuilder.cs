@@ -76,6 +76,11 @@ namespace LoadUCScenario
             // アクターの登録
             foreach (var actorName in ucs.Actors)
             {
+                if(actorName.StartsWith(" ") ||
+                    actorName.StartsWith("　") ||
+                    actorName.StartsWith("※")) {
+                    return;
+                }
                 AddActor(actor_package, uc_model, actorName);
             }
 
