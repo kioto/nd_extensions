@@ -35,7 +35,7 @@ namespace LoadUCScenario
             cond.SetField("Description", ucsCond.Condition);
         }
 
-        private void AddFlow(IModel usecase, UCScenarioFlow ucsFlow)
+        private (IModel, string) AddFlow(IModel usecase, UCScenarioFlow ucsFlow)
         {
             var flow = usecase.AddNewModel("Scenarios", "フロー");
             if (ucsFlow.FlowType == "基本フロー")
@@ -55,8 +55,38 @@ namespace LoadUCScenario
                 step.SetField("フローID", elem.FlowId);
                 step.SetField("シナリオ", elem.Scenario);
                 step.SetField("Name", elem.Scenario);
-                step.SetField("分岐", String.Join("\n", elem.Branches));
+                //step.SetField("分岐", String.Join("\n", elem. ));
                 step.SetField("備考", elem.Note);
+            }
+
+            return (flow, ucsFlow.FlowId);
+        }
+
+        private IModel FindStepById(IModel flow, string stepId)
+        {
+            foreach (var step in flow.GetFieldValues("Steps"))
+            {
+                if (stepId == step.GetFieldString("フローID")) {
+                    return step;
+                }
+            }
+
+            return null;
+        }
+
+        private void entryBranch(UCScenarioFlow ucsFlow, Dictionary<string, IModel> flowDic)
+        {
+            var flow = flowDic[ucsFlow.FlowId];
+            foreach (var elem in ucsFlow.Sequence)
+            {
+                if (elem.Branches.Length > 0) {
+                    var targetStep = FindStepById(flow, elem.FlowId);
+                    foreach (var sid in elem.Branches)
+                    {
+                        var branchFlow = flowDic[sid];
+                        targetStep.Relate("Branches", branchFlow);
+                    }
+                }
             }
         }
 
@@ -96,19 +126,38 @@ namespace LoadUCScenario
                 AddPostCondition(uc_model, cond);
             }
 
+            // フローIDとフローの辞書
+            var flowDic = new Dictionary<string, IModel>();
+            IModel res = null;
+            string resId = "";
+
             // 基本フローの登録
-            AddFlow(uc_model, ucs.MainFlow);
+            (res, resId) = AddFlow(uc_model, ucs.MainFlow);
+            flowDic.Add(resId, res);
 
             // 代替フローの登録
             foreach (var flow in ucs.AlternativeFlows)
             {
-                AddFlow(uc_model, flow);
+                (res, resId) = AddFlow(uc_model, flow);
+                flowDic.Add(resId, res);
             }
 
             // 例外フローの登録
             foreach (var flow in ucs.ExceptionFlows)
             {
-                AddFlow(uc_model, flow);
+                (res, resId) = AddFlow(uc_model, flow);
+                flowDic.Add(resId, res);
+            }
+
+            // ステップの分岐先フローを登録
+            entryBranch(ucs.MainFlow, flowDic);
+            foreach (var flow in ucs.AlternativeFlows)
+            {
+                entryBranch(flow, flowDic);
+            }
+            foreach (var flow in ucs.ExceptionFlows)
+            {
+                entryBranch(flow, flowDic);
             }
         }
     }

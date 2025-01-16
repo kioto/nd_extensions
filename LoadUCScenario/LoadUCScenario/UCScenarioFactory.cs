@@ -162,7 +162,11 @@ namespace LoadUCScenario
                 FlowType = flowType;
                 FlowId = row.GetCell(2).ToString();
                 Scenario = row.GetCell(3).ToString();
-                Branches = row.GetCell(4).ToString().Split('\n');
+                var branch = row.GetCell(4).ToString();
+                if (branch != "")
+                {
+                    Branches = row.GetCell(4).ToString().Split('\n');
+                }
                 Note = row.GetCell(5).ToString();
             }
 
