@@ -15,7 +15,7 @@ namespace LoadUCScenario
             IModel package = null;
             foreach (var model in parent.FindChildrenByClassDisplayName("パッケージ", recursive: true))
             {
-                if (model.ModelPath == pathName)
+                if (model.Name == pathName)
                 {
                     package = model;
                     break;

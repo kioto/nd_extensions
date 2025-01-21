@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,7 +94,12 @@ namespace LoadUCScenario
         public void AddScenario(IProject project, UCScenario ucs)
         {
             // ユースケースパッケージの取得
-            var uc_package = NDTools.findPackage(project, "システム開発/システム要件開発/ユースケース");
+            var uc_package = NDTools.findPackage(project, "ユースケース");
+            if(uc_package == null)
+            {
+                uc_package = project.DesignModel.AddNewModel("Entities", "Package");
+                uc_package.SetField("Name", "ユースケース");
+            }
 
             // ユースケースのモデルを作成
             var uc_model = uc_package.AddNewModel("OwnedElements", "Usecase");
@@ -101,7 +107,12 @@ namespace LoadUCScenario
             uc_model.SetField("Description", ucs.ScenarioId);
 
             // アクターパッケージの取得
-            var actor_package = NDTools.findPackage(project, "システム開発/システム要件開発/アクター");
+            var actor_package = NDTools.findPackage(project, "アクター");
+            if (actor_package == null)
+            {
+                actor_package = project.DesignModel.AddNewModel("Entities", "Package");
+                actor_package.SetField("Name", "アクター");
+            }
 
             // アクターの登録
             foreach (var actorName in ucs.Actors)
