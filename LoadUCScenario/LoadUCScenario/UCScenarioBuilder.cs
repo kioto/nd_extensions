@@ -120,7 +120,7 @@ namespace LoadUCScenario
                 if(actorName.StartsWith(" ") ||
                     actorName.StartsWith("　") ||
                     actorName.StartsWith("※")) {
-                    return;
+                    continue;
                 }
                 AddActor(actor_package, uc_model, actorName);
             }
