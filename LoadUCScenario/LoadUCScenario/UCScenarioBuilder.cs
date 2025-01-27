@@ -97,7 +97,7 @@ namespace LoadUCScenario
             var uc_package = NDTools.findPackage(project, "ユースケース");
             if(uc_package == null)
             {
-                uc_package = project.DesignModel.AddNewModel("Entities", "Package");
+                uc_package = project.AddNewRootModel("Package");
                 uc_package.SetField("Name", "ユースケース");
             }
 
@@ -110,7 +110,7 @@ namespace LoadUCScenario
             var actor_package = NDTools.findPackage(project, "アクター");
             if (actor_package == null)
             {
-                actor_package = project.DesignModel.AddNewModel("Entities", "Package");
+                actor_package = project.AddNewRootModel("Package");
                 actor_package.SetField("Name", "アクター");
             }
 
