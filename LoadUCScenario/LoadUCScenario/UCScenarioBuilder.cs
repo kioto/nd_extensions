@@ -31,7 +31,7 @@ namespace LoadUCScenario
 
         private void AddPostCondition(IModel usecase, UCScenarioCondition ucsCond)
         {
-            var cond = usecase.AddNewModel("PreCondition", "Condition");
+            var cond = usecase.AddNewModel("PostCondition", "Condition");
             cond.SetField("Name", ucsCond.Title);
             cond.SetField("Description", ucsCond.Condition);
         }
@@ -132,7 +132,7 @@ namespace LoadUCScenario
             }
 
             // 事後条件の登録
-            foreach (var cond in ucs.PreConditions)
+            foreach (var cond in ucs.PostConditions)
             {
                 AddPostCondition(uc_model, cond);
             }
