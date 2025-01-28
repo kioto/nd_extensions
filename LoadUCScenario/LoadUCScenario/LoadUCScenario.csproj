@@ -4,12 +4,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <PackageId>LoadUCScenario</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageProjectUrl>https://www.your-web-here.com/</PackageProjectUrl>
     <Authors>Me</Authors>
     <Company>Me</Company>
     <Product>LoadUCScenario</Product>
-    <Description>LoadUCScenarioの説明です。</Description>
+    <Description>UCV形式のExcelファイルを読み込み、モデルに変換するツール。</Description>
   </PropertyGroup>
 
   <ItemGroup>
