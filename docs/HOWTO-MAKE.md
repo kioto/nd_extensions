@@ -179,6 +179,38 @@ LoadUCScenario.1.0.1.nupkg
 
 ## 4. 配布
 
-（リポジトリに登録する手順）
+Next Designのエクステンションパッケージは、Gitリポジトリで管理している。エクステンションの配布は、このリポジトリを使用して行う。
+
+### 4-1. エクステンションパッケージリポジトリの取得
+
+以下のエクステンションパッケージ管理用Gitリポジトリを取得する。
+
+[ndpackages](https://github.com/???/ndpackages)
+
+リポジトリの取得手順例を以下に示す。
+
+```PowerShell
+% git clone https://github.com/???/ndpackages
+% ls
+ndpackages/
+%
+```
+
+### 4-2. エクステンションパッケージの登録
+
+エクステンションのパッケージファイルを、Gitリポジトリに登録する。一連の手順例を以下に示す。
+
+```PowerShell
+（ローカルのリポジトリディレクトリに移動）
+% cd ndpackages
+% cp XXX/ndpackages/LoadUCScenario.1.0.1.nupkg .
+% ls
+LoadUCScenario.1.0.1.nupkg
+% git add LoadUCScenario.1.0.1.nupkg
+% git commit
+（コミットコメントを記載）
+% git push origin main
+%
+```
 
 以上
