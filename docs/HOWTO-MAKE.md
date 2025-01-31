@@ -185,14 +185,15 @@ Next Designのエクステンションパッケージは、Gitリポジトリで
 
 以下のエクステンションパッケージ管理用Gitリポジトリを取得する。
 
-[ndpackages](https://github.com/???/ndpackages)
+Extensions
+https://github.com/???/Extensions
 
 リポジトリの取得手順例を以下に示す。
 
 ```PowerShell
-% git clone https://github.com/???/ndpackages
+% git clone https://github.com/???/Extensions
 % ls
-ndpackages/
+Extensions/
 %
 ```
 
@@ -202,7 +203,7 @@ ndpackages/
 
 ```PowerShell
 （ローカルのリポジトリディレクトリに移動）
-% cd ndpackages
+% cd Extensions
 % cp XXX/ndpackages/LoadUCScenario.1.0.1.nupkg .
 % ls
 LoadUCScenario.1.0.1.nupkg

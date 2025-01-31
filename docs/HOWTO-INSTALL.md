@@ -8,14 +8,14 @@ Next Designのエクステンションパッケージは、Gitリポジトリで
 
 Next Designを使用しているPCで、以下のエクステンションパッケージ管理用Gitリポジトリを取得する。あらかじめGitをインストールし、リポジトリへのアクセス権を取得しておくこと。
 
-https://github.com/???/ndpackages
+https://github.com/???/Extensions
 
 リポジトリの取得手順例を以下に示す。
 
 ```PowerShell
-% git clone https://github.com/???/ndpackages
+% git clone https://github.com/???/Extensions
 % ls
-ndpackages/
+Extensions/
 %
 ```
 
