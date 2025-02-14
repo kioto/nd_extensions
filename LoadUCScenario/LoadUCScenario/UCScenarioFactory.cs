@@ -88,7 +88,7 @@ namespace LoadUCScenario
                         scenario.RelatedRequirementId = val;
                         break;
                     case "概要、場面":
-                        scenario.Abstruct = val;
+                        scenario.Abstract = val;
                         break;
                     case "アクター":
                         scenario.Actors = val.Split('\n');
@@ -96,7 +96,7 @@ namespace LoadUCScenario
                     case "ステークホルダ要求":
                         scenario.StakeholderRequiement = val;
                         break;
-                    case "関連要求（制約）":
+                    case "関連要件(制約)":
                         scenario.RelatedRequirement = val;
                         break;
                     case "事前条件":

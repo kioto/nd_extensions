@@ -55,10 +55,10 @@ namespace LoadUCScenario
     {
         public string ScenarioId;                  // シナリオID
         public string RelatedRequirementId;       // 関連要求ID
-        public string Abstruct;                   // 概要、場面
+        public string Abstract;                   // 概要、場面
         public string[] Actors;                   //.アクター
         public string StakeholderRequiement;      // ステークホルダー要求
-        public string RelatedRequirement;         // 関連要求
+        public string RelatedRequirement;         // 関連要件（制約）
         public List<UCScenarioCondition> PreConditions;   // 事前条件
         public List<UCScenarioCondition> PostConditions;  // 事後条件
 
@@ -70,7 +70,7 @@ namespace LoadUCScenario
         {
             ScenarioId = "";
             RelatedRequirementId = "";
-            Abstruct = "";
+            Abstract = "";
             Actors = new string[0];
             StakeholderRequiement = "";
             RelatedRequirement = "";
