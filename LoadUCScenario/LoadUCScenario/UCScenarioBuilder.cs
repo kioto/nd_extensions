@@ -105,6 +105,10 @@ namespace LoadUCScenario
             var uc_model = uc_package.AddNewModel("OwnedElements", "Usecase");
             uc_model.SetField("Name", ucs.ScenarioId);
             uc_model.SetField("Description", ucs.ScenarioId);
+            uc_model.SetField("RelatedRequirementId", ucs.RelatedRequirementId);
+            uc_model.SetField("Abstract", ucs.Abstract);
+            uc_model.SetField("StakeholderRequirement", ucs.StakeholderRequiement);
+            uc_model.SetField("RelatedRequirement", ucs.RelatedRequirement);
 
             // アクターパッケージの取得
             var actor_package = NDTools.findPackage(project, "アクター");
