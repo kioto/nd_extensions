@@ -59,6 +59,19 @@ namespace LoadUCScenario
             }
         }
 
+        private String[] getActors(String actors_str)
+        {
+            var res = new List<String>();
+            foreach (String line in actors_str.Split('\n'))
+            {
+                foreach (String actor in line.Split('、')) {
+                    res.Add(actor);
+                }
+            }
+
+            return res.ToArray();
+        }
+
         private (bool, string) SetHeader(UCScenario scenario, ISheet sheet)
         {
             var rowIndex = 0;
@@ -91,7 +104,7 @@ namespace LoadUCScenario
                         scenario.Abstract = val;
                         break;
                     case "アクター":
-                        scenario.Actors = val.Split('\n');
+                        scenario.Actors = getActors(val);
                         break;
                     case "ステークホルダ要求":
                         scenario.StakeholderRequiement = val;
