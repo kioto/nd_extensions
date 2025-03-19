@@ -262,7 +262,11 @@ namespace LoadUCScenario
                 // フローの先頭判定
                 if (isFlowTitle == false)
                 {
-                    if (flowType == FlowTypeEnum.AlternativeFlow && flowRow.isFlowTitle())
+                    if (flowRow.FlowId == String.Empty)
+                    {
+                        // 空なら何もしない
+                    }
+                    else if (flowType == FlowTypeEnum.AlternativeFlow && flowRow.isFlowTitle())
                     {
                         flow = new UCScenarioFlow("代替フロー", flowRow.FlowId, flowRow.Scenario);
                         scenario.AlternativeFlows.Add(flow);
@@ -276,7 +280,7 @@ namespace LoadUCScenario
                     }
                 }
 
-                if (flowType != FlowTypeEnum.None)
+                if (flowType != FlowTypeEnum.None && flowRow.FlowId != string.Empty)
                 {
                     // フローを登録
                     EntryFlowElement(flow, flowRow);

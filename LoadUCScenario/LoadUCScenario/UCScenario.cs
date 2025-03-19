@@ -37,12 +37,12 @@ namespace LoadUCScenario
 
     public struct UCScenarioFlow
     {
-        public string FlowType;
-        public string FlowId;
-        public string Description;
+        public string FlowType = "";
+        public string FlowId = "";
+        public string Description = "";
         public List<UCScenarioFlowElememnt> Sequence;
 
-        public UCScenarioFlow(string flowType, string flowId, string desc)
+        public UCScenarioFlow(string flowType="", string flowId = "", string desc = "")
         {
             FlowType = flowType;
             FlowId = flowId;
