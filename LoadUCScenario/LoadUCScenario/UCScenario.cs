@@ -51,6 +51,18 @@ namespace LoadUCScenario
         }
     }
 
+    public struct UCScenarioIssue
+    {
+        public string IssueId ="";
+        public string Description ="";
+
+        public UCScenarioIssue(string issueid="", string desc="")
+        {
+            IssueId = issueid;
+            Description = desc;
+        }
+    }
+
     public class UCScenario
     {
         public string ScenarioId;                  // シナリオID
@@ -66,6 +78,8 @@ namespace LoadUCScenario
         public List<UCScenarioFlow> AlternativeFlows;  // 代替フロー
         public List<UCScenarioFlow> ExceptionFlows;    // 例外フロー
 
+        public List<UCScenarioIssue> Issues;           // 課題、TBD事項
+
         public UCScenario()
         {
             ScenarioId = "";
@@ -80,6 +94,7 @@ namespace LoadUCScenario
             MainFlow = new UCScenarioFlow();
             AlternativeFlows = new List<UCScenarioFlow>();
             ExceptionFlows = new List<UCScenarioFlow>();
+            Issues = new List<UCScenarioIssue>();
         }
     }
 }
