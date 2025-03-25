@@ -91,6 +91,13 @@ namespace LoadUCScenario
             }
         }
 
+        private void AddIssue(IModel usecase, UCScenarioIssue issue)
+        {
+            var cond = usecase.AddNewModel("Issues", "Issue");
+            cond.SetField("Name", issue.IssueId);
+            cond.SetField("Description", issue.Description);
+        }
+
         public void AddScenario(IProject project, UCScenario ucs)
         {
             // ユースケースパッケージの取得
@@ -173,6 +180,12 @@ namespace LoadUCScenario
             foreach (var flow in ucs.ExceptionFlows)
             {
                 entryBranch(flow, flowDic);
+            }
+
+            // 課題、TBD事項を登録
+            foreach (var issue in ucs.Issues)
+            {
+                AddIssue(uc_model, issue);
             }
         }
     }

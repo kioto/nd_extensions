@@ -44,6 +44,12 @@ namespace LoadUCScenario
                 return (null, errMsg);
             }
 
+            (res, errMsg) = SetIssues(scenario, worksheet);
+            if (res == false)
+            {
+                return (null, errMsg);
+            }
+
             return (scenario, errMsg);
         }
 
@@ -147,12 +153,12 @@ namespace LoadUCScenario
             return (true, "");
         }
 
-        private int GetFlowHeaderIndex(ISheet sheet)
+        private int GetHeaderIndex(ISheet sheet, String headerName)
         {
             for (var rowIndex = 0; rowIndex < MAX_ROW_INDEX; rowIndex++)
             {
                 var row = sheet.GetRow(rowIndex);
-                if (row.GetCell(0).ToString() == "フロー")
+                if (row.GetCell(0).ToString() == headerName)
                 {
                     return rowIndex;
                 }
@@ -224,7 +230,7 @@ namespace LoadUCScenario
         private (bool, string) SetFlows(UCScenario scenario, ISheet sheet)
         {
             // 「フロー」のヘッダまでスキップ
-            var rowIndex = GetFlowHeaderIndex(sheet);
+            var rowIndex = GetHeaderIndex(sheet, "フロー");
             if (rowIndex < 0) return (false, "フローが見つかりません");  // フローヘッダが見つからない
 
             // フロー行の解析
@@ -262,7 +268,11 @@ namespace LoadUCScenario
                 // フローの先頭判定
                 if (isFlowTitle == false)
                 {
-                    if (flowType == FlowTypeEnum.AlternativeFlow && flowRow.isFlowTitle())
+                    if (flowRow.FlowId == String.Empty)
+                    {
+                        // 空なら何もしない
+                    }
+                    else if (flowType == FlowTypeEnum.AlternativeFlow && flowRow.isFlowTitle())
                     {
                         flow = new UCScenarioFlow("代替フロー", flowRow.FlowId, flowRow.Scenario);
                         scenario.AlternativeFlows.Add(flow);
@@ -276,7 +286,7 @@ namespace LoadUCScenario
                     }
                 }
 
-                if (flowType != FlowTypeEnum.None)
+                if (flowType != FlowTypeEnum.None && flowRow.FlowId != string.Empty)
                 {
                     // フローを登録
                     EntryFlowElement(flow, flowRow);
@@ -289,5 +299,37 @@ namespace LoadUCScenario
             }
             return (true, "");
         }
+
+        private struct Issue
+        {
+            public string issueId = "";
+            public string description = "";
+
+            public Issue(IRow row)
+            {
+                issueId = row.GetCell(1).ToString();
+                description = row.GetCell(2).ToString();
+            }
+        }
+
+        private (bool, string) SetIssues(UCScenario scenario, ISheet sheet)
+        {
+            // 「フロー」のヘッダまでスキップ
+            var rowIndex = GetHeaderIndex(sheet, "課題、TBD事項");
+            if (rowIndex < 0) return (false, "課題、TBD事項が見つかりません");  // Issueヘッダが見つからない
+
+            for (; rowIndex < MAX_ROW_INDEX; rowIndex++)
+            {
+                var row = sheet.GetRow(rowIndex);
+                if (row == null) break;
+                string sid = row.GetCell(2).ToString();
+                string desc = row.GetCell(3).ToString();
+                if (!string.IsNullOrEmpty(desc)) {
+                    scenario.Issues.Add(new UCScenarioIssue(sid, desc));
+                }
+        }
+            return (true, "");
+        }
+
     }
 }
